@@ -18,4 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
         folder: "svg",
         ext: ".svg"
     });
+
+    // Text Wave
+    {
+        document.querySelectorAll('.text-wave').forEach(el => {
+            const text = el.textContent;
+            el.textContent = '';
+
+            text.split('').forEach((ch, idx) => {
+                const span = document.createElement('span');
+                span.textContent = ch;
+                span.style.setProperty('--i', idx);
+                el.appendChild(span);
+            });
+        });
+    }
 });

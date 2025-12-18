@@ -46,13 +46,21 @@
 }
 
 .md-content__inner.md-typeset h6 {
-    border-left: 2px solid var(--md-primary-fg-color);
+    border-left: 4px solid var(--md-primary-fg-color);
     padding-left: .25rem;
+}
+
+.md-content__inner.md-typeset .pointColor {
+    color: var(--md-primary-fg-color);
 }
 
 .md-content__inner.md-typeset .pointDot {
     position: relative;
-    color: var(--md-typeset-color);
+    color: var(--md-primary-fg-color);
+    padding-left: .5rem;
+}
+.md-content__inner.md-typeset .pointBar {
+    border-left: 2px solid var(--md-primary-fg-color);
     padding-left: .5rem;
 }
 
@@ -73,7 +81,7 @@
     background-size: 0% 45%;
     background-repeat: no-repeat;
     background-position: left bottom;
-    transition: background 1.5s cubic-bezier(0.83, 0, 0.17, 1);
+    transition: background 1.5s ease-in-out;
     color: inherit;
 }
 
@@ -86,7 +94,7 @@ body[data-md-color-media="(prefers-color-scheme: dark)"] .md-content__inner.md-t
     background-size: 0% 45%;
     background-repeat: no-repeat;
     background-position: left bottom;
-    transition: background 1.5s cubic-bezier(0.83, 0, 0.17, 1);
+    transition: background 1.5s ease-in-out;
     color: inherit;
 }
 
@@ -113,5 +121,19 @@ body[data-md-color-media="(prefers-color-scheme: dark)"] .md-content__inner.md-t
 
     100% {
         background-position: 0 50%;
+    }
+}
+
+.md-content__inner.md-typeset .text-wave > span {
+    display: inline-block;
+    animation: wave 1.5s linear infinite;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+@keyframes wave {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-2px);
     }
 }
