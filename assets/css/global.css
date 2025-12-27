@@ -1,0 +1,139 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: 'PyeongtaekSemiconductor';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408@1.0/PTBandocheR.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monoplexkr';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_Monoplex-kr@1.0/MonoplexKR-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+:root {
+    --md-text-font: 'PyeongtaekSemiconductor';
+    --md-code-font: 'Monoplexkr';
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+    border-width: 0;
+    border-left-width: 4px;
+}
+
+.md-content__inner.md-typeset h2 {
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid var(--md-primary-fg-color);
+}
+
+.md-content__inner.md-typeset h3 {
+    border-bottom: 2px solid var(--md-primary-fg-color);
+}
+
+.md-content__inner.md-typeset h4 {
+    border-bottom: 1px dashed var(--md-primary-fg-color);
+}
+
+.md-content__inner.md-typeset h5 {
+    border-left: 2px solid var(--md-primary-fg-color);
+    border-bottom: 1px solid var(--md-primary-fg-color);
+    padding-left: .25rem;
+    color: var(--md-typeset-color);
+}
+
+.md-content__inner.md-typeset h6 {
+    border-left: 4px solid var(--md-primary-fg-color);
+    padding-left: .25rem;
+}
+
+.md-content__inner.md-typeset .pointColor {
+    color: var(--md-primary-fg-color);
+}
+
+.md-content__inner.md-typeset .pointDot {
+    position: relative;
+    color: var(--md-primary-fg-color);
+    padding-left: .5rem;
+}
+.md-content__inner.md-typeset .pointBar {
+    border-left: 2px solid var(--md-primary-fg-color);
+    padding-left: .5rem;
+}
+
+.md-content__inner.md-typeset .pointDot::before {
+    content: '';
+    display: inline;
+    width: 4px;
+    height: 4px;
+    background-color: var(--md-primary-fg-color);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.md-content__inner.md-typeset .dynamic-highlight {
+    background: linear-gradient(45deg, #b39ddb80, #b39ddb80);
+    background-size: 0% 45%;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transition: background 1.5s ease-in-out;
+    color: inherit;
+}
+
+.md-content__inner.md-typeset .dynamic-highlight.on {
+    background-size: 100% 45%;
+}
+
+body[data-md-color-media="(prefers-color-scheme: dark)"] .md-content__inner.md-typeset .dynamic-highlight {
+    background: linear-gradient(45deg, #69f0ae80, #69f0ae80);
+    background-size: 0% 45%;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transition: background 1.5s ease-in-out;
+    color: inherit;
+}
+
+body[data-md-color-media="(prefers-color-scheme: dark)"] .md-content__inner.md-typeset .dynamic-highlight.on {
+    background-size: 100% 45%;
+}
+
+.md-content__inner.md-typeset .text-gradient {
+    animation: textAnim 5s ease-out infinite;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 250% 500%;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@keyframes textAnim {
+    0% {
+        background-position: 0 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.md-content__inner.md-typeset .text-wave > span {
+    display: inline-block;
+    animation: wave 1.5s linear infinite;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+@keyframes wave {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-2px);
+    }
+}

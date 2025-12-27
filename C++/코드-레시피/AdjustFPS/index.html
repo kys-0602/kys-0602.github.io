@@ -1,0 +1,1268 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://kys-0602.github.io/C%2B%2B/%EC%BD%94%EB%93%9C-%EB%A0%88%EC%8B%9C%ED%94%BC/AdjustFPS/">
+      
+      
+        <link rel="prev" href="../../%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/Complexity/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+
+    <!-- SITE VERIFICATION CODE -->
+    <meta name="google-site-verification" content="GRz7q1CfePijOZEl_h4J-v9Qtf3670jdlxoTbSY-jKY" />
+
+    
+      
+        <title>게임 개발) FPS에 따라 속도 조정하기 - K's Garage</title>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+
+    <!-- TWEMOJI -->
+    <style>
+        img.emoji {
+            height: 1em;
+            width: 1em;
+            margin: 0 0.05em 0 0.1em;
+            vertical-align: -0.1em;
+        }
+    </style>
+
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/css/global.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-9K76SY4SPM"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-9K76SY4SPM",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-9K76SY4SPM",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fps" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../../.." title="K&#39;s Garage" class="md-header__button md-logo" aria-label="K's Garage" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            K's Garage
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              게임 개발) FPS에 따라 속도 조정하기
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="다크 모드 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="라이트 모드 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="공유" aria-label="공유" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/kys-0602/kys-0602.github.io" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    kys-0602
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="탭" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Welcome to MkDocs
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  C++
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../SSAFY/" class="md-tabs__link">
+          
+  
+  
+  SSAFY
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="K&#39;s Garage" class="md-nav__button md-logo" aria-label="K's Garage" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    K's Garage
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/kys-0602/kys-0602.github.io" title="저장소로 이동" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    kys-0602
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome to MkDocs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C++
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    C++
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C++
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    카테고리
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    카테고리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../category/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    알고리즘
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../category/%EC%BD%94%EB%93%9C-%EB%A0%88%EC%8B%9C%ED%94%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    코드 레시피
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SSAFY/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSAFY
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        서론
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        고전 게임
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        가산과 감산 연산
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="가산과 감산 연산">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        델타타임
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        주의할 점: 속도의 단위
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        프레임 비율을 이용한 보정
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        곱셈 연산 (A *= B)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="곱셈 연산 (A *= B)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pow() 함수를 이용한 보정
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        결론
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Index로 돌아가기
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    메타데이터
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2025-12-27 23:43:00+00:00" class="md-ellipsis">2025년 12월 27일</time>
+                      </div>
+                    </li>
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 13h1.5v2.82l2.44 1.41-.75 1.3L15 16.69zm4-5H5v11h4.67c-.43-.91-.67-1.93-.67-3a7 7 0 0 1 7-7c1.07 0 2.09.24 3 .67zM5 21a2 2 0 0 1-2-2V5c0-1.11.89-2 2-2h1V1h2v2h8V1h2v2h1a2 2 0 0 1 2 2v6.1c1.24 1.26 2 2.99 2 4.9a7 7 0 0 1-7 7c-1.91 0-3.64-.76-4.9-2zm11-9.85A4.85 4.85 0 0 0 11.15 16c0 2.68 2.17 4.85 4.85 4.85A4.85 4.85 0 0 0 20.85 16c0-2.68-2.17-4.85-4.85-4.85"/></svg>
+                          <time datetime="2025-12-27 23:43:00+00:00" class="md-ellipsis">2025년 12월 27일</time>
+                        </div>
+                      </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            카테고리
+                            
+                              <a href="../../category/%EC%BD%94%EB%93%9C-%EB%A0%88%EC%8B%9C%ED%94%BC/">코드 레시피</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              읽는시간 5분
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+      
+        <span class="md-tag">게임 개발</span>
+      
+    
+      
+      
+      
+      
+        <span class="md-tag">코드 레시피</span>
+      
+    
+  </nav>
+
+
+  
+  
+
+
+<h1 id="fps">게임 개발) FPS에 따라 속도 조정하기</h1>
+<p>특정 FPS에서 동작하던 코드를 더 높거나 낮은 FPS로 변경했을 때, 원본의 속도를 그대로 유지하려면 어떻게 해야할까요?</p>
+<!-- more -->
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>개인적으로 공부한 내용을 복습 겸 강좌 형식으로 작성한 글입니다.</p>
+<p>잘못된 정보와 오타 등이 포함되어 있을 수 있습니다.</p>
+</div>
+<h2 id="_1">서론</h2>
+<p>설정한 FPS에 따른 게임 속도와 변화율을 보정하는 방법에 대해 알아보기 전에, 사전 배경 지식을 조금만 보고 가봅시다.</p>
+<p>FPS라는 단어... 많이 보고 들어보셨죠? 오늘 우리가 다룰 이 <strong>FPS</strong>가 무엇인지 아시나요?</p>
+<p>보통 FPS라고 하면 흔하게 언급되는 두 가지가 있습니다. 초당 프레임 수를 의미하는 FPS와 1인칭 슈팅 게임을 의미하는 FPS입니다. 오늘 우리가 알아볼 것은 초당 프레임 수<sup style="color:gray">Frame Per Second</sup>를 의미하는 FPS입니다. 여기서, 프레임<sup style="color:gray">Frame</sup>은 정지된 이미지 한 장을 의미합니다.</p>
+<div class="admonition info">
+<p class="admonition-title">헤르츠</p>
+<p>우리는 프레임이 발생하는 속도를 표기하기 위해 수 뒤에 FPS라는 단위를 수식합니다. '30FPS'라고 하면, 초당 프레임을 표시함을 의미합니다.</p>
+<p>뭐... 조금 더 엄밀하게(?) 따지자면 헤르츠<sup style="color:gray">Hz</sup>라는 단위가 있지만, 이 단위는 보통 모니터의 주사율을 표기할 때 사용하기 때문에 따로 구분지어 사용합니다.</p>
+</div>
+<h2 id="_2">고전 게임</h2>
+<p>아주 오래된 게임의 경우(대략적으로 2004년 이전쯤?) 지금처럼 하드웨어의 성능이 좋지 않았기 때문에 특정 FPS에서 동작하도록 만들어진 게임이 은근 있습니다. 그리고 이 게임을 현대에 와서 즐기려하면 여러가지 문제가 발생합니다. 호환성과 해상도는 나중 문제로 하고... 프레임 레이트가 낮기 때문에 화면이 툭툭 끊겨 보이고, 3D 게임을 하면 멀미를 유발합니다.</p>
+<p>과거와는 다르게 현재는 하드웨어의 성능이 매우 좋아졌기 때문에 60FPS를 기반으로 하거나, 더 높은 FPS를 기반으로 개발합니다. FPS가 높으면 높을 수록 부드러운 화면 전환을 보여주기 때문에 멀미 유발도 덜하고 눈이 편해집니다.</p>
+<div class="admonition question">
+<p class="admonition-title">그래서 뭐가 문제죠?</p>
+<p>굳이 먼 옛날 게임이 아니더라도 현재에도 특정 FPS에서 동작하도록 만들어진 게임이 있습니다. 왜냐하면 특정 하드웨어에 최적화된 속도 등이기 때문이죠.</p>
+<p>사실 게임을 즐기는 데 큰 문제는 없습니다. 다만, 이를 리메이크 또는 리마스터 작업을 수행할 때 조금 귀찮아집니다.</p>
+<p>과거에 비해 더 부드러운 화면 전환과 입력 처리를 보이기 위해 기대릴 품지 않고 FPS를 높였더니, 높인만큼 게임의 속도와 변화율이 매우 빨라지는 겁니다. 예를 들어, 30FPS에서 동작하던 수류탄 던지기 행동이 60FPS에선 2배 이상 빨라져 야구 투수로 변해버리는 것이죠. 144FPS에선 뭐 사실상 수류탄 총알이죠.</p>
+<p>무엇이 문제인지 아시겠나요? 특정 FPS를 기반으로 설계했기 때문에 그렇습니다. 즉, FPS가 변화함에 따른 보정을 수행하지 않았기 때문에 그렇습니다.</p>
+</div>
+<h2 id="_3">가산과 감산 연산</h2>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">가산과_감산.cpp</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span>
+<span class="normal"><a href="#__codelineno-0-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kt">int32_t</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1">// 대충 X축 이동 연산</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Input</span><span class="o">::</span><span class="n">CheckKeyDown</span><span class="p">(</span><span class="n">RIGHT_ARROW</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<p>30FPS에서 동작하는 게임에서, 캐릭터의 X축을 이동시키기 위해 <code class="language-cpp highlight"><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span></code> 연산을 수행한다고 해봅시다.</p>
+<p>30FPS는 초당 30 프레임을 의미하고, 이는 1초가 30프레임이라는 것을 나타냅니다. 자, 위 코드를 정확히 1초(30프레임) 수행했을 때 <code>x</code>의 값은 얼마일까요?</p>
+<p>간단한 질문을 해서 좀 그렇죠? <code>x</code>에 <code>speed</code>를 30번 더한 값이 최종값이 되겠죠? 공식으로 나타내면 <code>x + (speed * 30)</code>입니다. 즉, 최종값은 61이며, 1초 동안 60만큼 이동합니다.</p>
+<p>자, 문제는 FPS가 변했을 때입니다. 60FPS와 144FPS로 높였을 때 값의 변화를 표로 확인해봅시다:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">시간(초)</th>
+<th style="text-align: left;">30FPS</th>
+<th style="text-align: left;">60FPS</th>
+<th style="text-align: left;">144FPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">61</td>
+<td style="text-align: left;">121</td>
+<td style="text-align: left;">289</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">121</td>
+<td style="text-align: left;">241</td>
+<td style="text-align: left;">588</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">181</td>
+<td style="text-align: left;">361</td>
+<td style="text-align: left;">865</td>
+</tr>
+</tbody>
+</table>
+<p>30FPS에서 적당히 움직이던 캐릭터가 60FPS에선 우사인 볼트로, 144FPS에선 축지법을 쓰는 수준으로 변해버립니다.</p>
+<h3 id="_4">델타타임</h3>
+<p>게임 개발을 조금이라도 접해보신 분들은 <strong>델타타임</strong>이라는 개념을 떠올리셨을 겁니다. 델타타임<sup style="color:gray">DeltaTime</sup>은 <strong>두 연속된 프레임 간의 시간 간격</strong>을 의미합니다.</p>
+<p>하드웨어의 성능이 제각각인 PC 환경에선 프레임 드랍이 발생할 수 있고, 고사양 PC에선 훨씬 더 높은 프레임을 유지할 수 있습니다. 이럴 때 <strong>모든 컴퓨터에서 동일한 게임 속도</strong>를 보장하기 위해 사용하는 것이 델타타임입니다.</p>
+<p>델타타임의 원리는 간단합니다. 프레임 사이의 시간 간격을 이동 속도에 곱해주면 끝입니다.</p>
+<blockquote>
+<p>거리 = 속도 &times; 시간 이라는 물리 공식과도 같죠.</p>
+</blockquote>
+<div class="admonition info">
+<p class="admonition-title">델타타임 구하기</p>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">calcDT.cpp</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">currentTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetCurrentTime</span><span class="p">();</span><span class="w">           </span><span class="c1">// 현재 시간</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kt">float</span><span class="w"> </span><span class="n">deltaTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">currentTime</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lastTime</span><span class="p">;</span><span class="w">       </span><span class="c1">// 현재 시간 - 이전 시간 = 경과 시간</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">lastTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">currentTime</span><span class="p">;</span><span class="w">                         </span><span class="c1">// 시간 갱신</span>
+</span></code></pre></div></td></tr></table></div>
+<p>보통의 게임 엔진에선 기본으로 제공합니다. 직접 구현한다면 위와 같습니다.</p>
+<p><code>Update()</code> 메서드 안에서 델타타임을 계속 구하면 됩니다.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">고정 델타타임</p>
+<p>이상적인 상황이라면 <code>1.0 / FPS</code>가 델타타임이 됩니다. 프레임 드랍이 발생하지 않는 걸 보장할 수 있다면은요...</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">FPS</th>
+<th style="text-align: left;">평균 델타타임 (초)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">30FPS</td>
+<td style="text-align: left;">0.033333</td>
+</tr>
+<tr>
+<td style="text-align: left;">60FPS</td>
+<td style="text-align: left;">0.016667</td>
+</tr>
+<tr>
+<td style="text-align: left;">144FPS</td>
+<td style="text-align: left;">0.006944</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="_5">주의할 점: 속도의 단위</h3>
+<p>자, 여기서 많은 분들이 실수하는 부분이 있습니다. 기존 코드를 델타 타임 방식으로 변경할 때 단순히 <code>deltaTime</code>만 곱하면 된다고 생각하는 것이죠.</p>
+<p>기존 코드: <code>x += speed;</code> (speed가 2라고 가정)</p>
+<p>수정 코드: <code>x += speed * deltaTime;</code></p>
+<p>이렇게 하면 어떻게 될까요?
+30FPS 기준 <code>deltaTime</code>은 약 0.033입니다.
+<code>x += 2 * 0.033</code> -&gt; <code>x</code>는 1초(30프레임) 동안 약 2만큼 이동합니다.</p>
+<p>어라? 아까는 1초에 60만큼 이동했는데 지금은 2밖에 이동을 안 하네요? <strong>속도가 엄청나게 느려졌습니다.</strong></p>
+<p>이유는 간단합니다. 기존의 <code>speed</code>는 <strong>"프레임당 이동 거리"</strong>였는데, 델타 타임 공식(<code>속도 * 시간</code>)에 들어가는 속도는 <strong>"초당 이동 거리"</strong>여야 하기 때문입니다.</p>
+<p>따라서 델타 타임을 적용하려면 <code>speed</code> 변수의 값을 "초당 이동 거리"로 변환해주어야 합니다.
+기존에 30FPS에서 한 프레임에 2만큼 이동했다면, 1초에는 <code>2 * 30 = 60</code>만큼 이동했을 것입니다.
+즉, <code>newSpeed = speed * 30;</code> 으로 값을 재설정하고 <code>x += newSpeed * deltaTime;</code>을 해야 원래 속도와 같아집니다.</p>
+<h3 id="_6">프레임 비율을 이용한 보정</h3>
+<p>만약 기존 코드의 수많은 상수(<code>speed</code> 같은 값들)를 일일이 "초당 단위"로 다시 계산해서 넣기 귀찮다면 어떻게 할까요?</p>
+<p>이때 사용할 수 있는 것이 <strong>프레임 비율</strong>입니다. 거창한 건 아니고, "기준이 되는 FPS"를 "현재 FPS"로 나눈 값입니다.</p>
+<p><code>비율 = 기준_FPS / 현재_FPS</code></p>
+<p>예를 들어 30FPS를 기준으로 만든 게임(<code>BASE_FPS = 30</code>)을 60FPS 환경에서 돌린다면:
+<code>Ratio = 30 / 60 = 0.5</code></p>
+<p><code>x += speed * Ratio;</code></p>
+<p>이렇게 하면 60FPS에서는 <code>speed</code>의 절반만큼만 더해지지만, 프레임이 2배 더 자주 실행되므로 결과적으로 1초 동안 이동하는 거리는 같아집니다.</p>
+<ul>
+<li>30FPS: <code>2</code>를 30번 더함 = 60</li>
+<li>60FPS: <code>2 * 0.5(=1)</code>를 60번 더함 = 60</li>
+</ul>
+<p>이 방식은 포팅 작업 시 기존 수치들을 그대로 유지하면서 FPS 가변성을 지원하고 싶을 때 유용합니다.</p>
+<h2 id="a-b">곱셈 연산 (A *= B)</h2>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="kt">float</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.01f</span><span class="p">;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="n">x</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span><span class="w"> </span><span class="c1">// 매 프레임마다 1.01배씩 증가</span>
+</span></code></pre></div></td></tr></table></div>
+<p>이번에는 곱셈 연산입니다. 마찰력에 의한 감속이나, 가속도가 붙는 상황 등에서 자주 쓰입니다.
+이 역시 FPS가 높아지면 연산 횟수가 많아져서 값이 기하급수적으로 변합니다.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">시간(초)</th>
+<th style="text-align: left;">30FPS</th>
+<th style="text-align: left;">60FPS</th>
+<th style="text-align: left;">144FPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1.34</td>
+<td style="text-align: left;">1.81</td>
+<td style="text-align: left;">4.19</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1.81</td>
+<td style="text-align: left;">3.30</td>
+<td style="text-align: left;">17.56</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">2.44</td>
+<td style="text-align: left;">5.99</td>
+<td style="text-align: left;">73.59</td>
+</tr>
+</tbody>
+</table>
+<p>144FPS에서는 값이 폭주하고 있습니다.</p>
+<h3 id="pow"><code>pow()</code> 함수를 이용한 보정</h3>
+<p>단순 더하기(<code>+=</code>)는 비율을 그냥 곱하면 됐습니다. 하지만 곱하기(<code>*=</code>)를 여러 번 하는 건 <strong>거듭제곱</strong>의 영역입니다.</p>
+<p>수학 시간이 되어버렸지만, 간단합니다.
+30FPS에서 1.01을 1번 곱하는 것은, 60FPS에서 어떤 수(<code>Y</code>)를 2번 곱하는 것과 같아야 합니다.
+<code>1.01 = Y * Y</code> -&gt; <code>Y = sqrt(1.01)</code> -&gt; <code>Y = 1.01^(0.5)</code></p>
+<p>즉, 여기서도 아까 구한 <strong>비율(Ratio)</strong>이 지수(Exponent)로 사용됩니다.</p>
+<p><code>x *= pow(speed, BASE_FPS / FPS);</code></p>
+<p>프로그래밍 언어의 <code>pow(밑, 지수)</code> 함수를 사용하면 됩니다.</p>
+<ul>
+<li>30FPS: <code>pow(1.01, 30/30)</code> = <code>1.01</code> (그대로)</li>
+<li>60FPS: <code>pow(1.01, 30/60)</code> = <code>1.00498...</code></li>
+</ul>
+<p>1.00498...을 60번 곱하면 1.01을 30번 곱한 것과 거의 근사한 값이 나옵니다.</p>
+<p>이 방식을 사용하면 프레임 레이트가 변해도 물체의 감속비나 가속비를 일정하게 유지할 수 있습니다.</p>
+<h2 id="_7">결론</h2>
+<p>FPS가 변해도 게임의 로직이 일정하게 동작하게 하려면 "시간"을 기준으로 생각해야 합니다.</p>
+<ol>
+<li><strong>새로 만드는 게임</strong>: <strong>델타 타임</strong>을 무조건 사용하세요. 모든 속도 변수는 "초당 이동 거리"로 정의하세요.</li>
+<li><strong>기존 게임 포팅</strong>: 값을 일일이 바꾸기 힘들다면 <strong>프레임 비율(<code>Base / Current</code>)</strong>을 활용하세요.<ul>
+<li>더하기 연산: <code>val += speed * Ratio</code></li>
+<li>곱하기 연산: <code>val *= pow(factor, Ratio)</code></li>
+</ul>
+</li>
+</ol>
+<p>이렇게 하면 어떤 주사율의 모니터에서도 쾌적하게 돌아가는 게임을 만들 수 있습니다!</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+  
+
+
+
+    <!-- <h2 id="__comments">댓글</h2> -->
+    <!-- Insert generated snippet here -->
+    <script src="https://giscus.app/client.js" data-repo="kys-0602/kys-0602.github.io" data-repo-id="R_kgDOQq4HIQ"
+        data-category="Announcements" data-category-id="DIC_kwDOQq4HIc4Cz89f" data-mapping="pathname" data-strict="0"
+        data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme"
+        data-lang="ko" crossorigin="anonymous" async>
+        </script>
+
+    <!-- Synchronize Giscus theme with palette -->
+    <script>
+    var giscus = document.querySelector("script[src*=giscus]")
+
+    // Set palette on initial load
+    var palette = __md_get("__palette")
+    if (palette && typeof palette.color === "object") {
+        var theme = palette.color.scheme === "slate"
+            ? "transparent_dark"
+            : "light"
+
+        // Instruct Giscus to set theme
+        giscus.setAttribute("data-theme", theme)
+    }
+
+    // Register event handlers after documented loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        var ref = document.querySelector("[data-md-component=palette]")
+        ref.addEventListener("change", function () {
+            var palette = __md_get("__palette")
+            if (palette && typeof palette.color === "object") {
+                var theme = palette.color.scheme === "slate"
+                    ? "transparent_dark"
+                    : "light"
+
+                // Instruct Giscus to change theme
+                var frame = document.querySelector(".giscus-frame")
+                frame.contentWindow.postMessage(
+                    { giscus: { setConfig: { theme } } },
+                    "https://giscus.app"
+                )
+            }
+        })
+    })
+</script>
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../../%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/Complexity/" class="md-footer__link md-footer__link--prev" aria-label="이전: C++ 알고리즘) 시간복잡도와 공간복잡도">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                C++ 알고리즘) 시간복잡도와 공간복잡도
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.prune", "navigation.path", "toc.follow", "navigation.footer", "navigation.sections", "navigation.top", "content.code.copy", "content.code.annotate", "content.tooltips", "search.suggest", "search.highlight", "search.share"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@17.0.2/dist/twemoji.min.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="../../../assets/js/global.js"></script>
+      
+    
+  </body>
+</html>
