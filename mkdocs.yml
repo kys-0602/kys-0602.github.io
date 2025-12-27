@@ -63,6 +63,13 @@ plugins:
       categories_allowed:
         - 알고리즘
         - 자료구조
+  - blog:
+      blog_dir: SSAFY
+      post_url_format: "{categories}/{file}"
+      archive: false
+      categories_allowed:
+        - 1학기
+        - 2학기
   - tags
 
 markdown_extensions:
