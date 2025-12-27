@@ -59,23 +59,24 @@ plugins:
       lang: ko
   - blog:
       blog_dir: C++
+      blog_toc: true
       post_url_format: "{categories}/{file}"
       archive: false
+      categories_toc: true
       categories_allowed:
         - 알고리즘
         - 자료구조
+        - "코드 레시피"
   - blog:
       blog_dir: SSAFY
+      blog_toc: true
       post_url_format: "{categories}/{file}"
       archive: false
+      categories_toc: true
       categories_allowed:
         - 1학기
         - 2학기
   - tags
-
-nav:
-  - SSAFY: SSAFY/index.md
-  - C++: C++/index.md
 
 markdown_extensions:
   - abbr
