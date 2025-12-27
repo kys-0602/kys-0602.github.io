@@ -1,5 +1,6 @@
 site_name: K's Garage
 site_url: https://kys-0602.github.io
+repo_name: kys-0602
 repo_url: https://github.com/kys-0602/kys-0602.github.io
 theme:
   name: material
@@ -71,6 +72,10 @@ plugins:
         - 1학기
         - 2학기
   - tags
+
+nav:
+  - SSAFY: SSAFY/index.md
+  - C++: C++/index.md
 
 markdown_extensions:
   - abbr
